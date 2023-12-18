@@ -27,7 +27,7 @@ export default function Header() {
             Weather App
           </p>
           <span className='text-textSecondary font-light text-sm'>
-            {currentTime}
+            {currentTime === '' ? 'loading' : currentTime}
           </span>
         </div>
       </nav>
