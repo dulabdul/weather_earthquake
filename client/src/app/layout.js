@@ -1,3 +1,4 @@
+import Header from '@/Components/Layout/Header';
 import './globals.css';
 import { Overpass } from 'next/font/google';
 const overpass = Overpass({ subsets: ['latin'] });
@@ -10,7 +11,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang='en'>
-      <body className={overpass.className}>{children}</body>
+      <body className={overpass.className}>
+        <Header />
+        <main>{children}</main>
+      </body>
     </html>
   );
 }
