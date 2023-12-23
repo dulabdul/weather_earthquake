@@ -3,15 +3,15 @@ const http = require('http');
 const socketIO = require('socket.io');
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', ''); // Replace '' with your front-end URL in a production environment for security
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  next();
+const io = socketIO(server, {
+  cors: {
+    origin: 'http://localhost:3000', // Replace with your client's origin
+    methods: ['GET', 'POST'], // Add any other methods if needed
+    allowedHeaders: ['my-custom-header'],
+    credentials: true, // If you're using cookies or sessions
+  },
 });
+const cors = require('cors');
 io.on('connection', (socket) => {
   console.log('Client connected');
 
