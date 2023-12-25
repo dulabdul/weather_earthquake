@@ -13,7 +13,7 @@ wss.on('connection', (ws) => {
 
   // Send time updates to connected clients every second
   const sendTime = () => {
-    ws.send(new Date().toLocaleTimeString());
+    ws.send(Date.now().toString());
   };
 
   const interval = setInterval(sendTime, 1000);
