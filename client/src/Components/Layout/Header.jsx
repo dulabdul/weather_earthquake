@@ -1,23 +1,50 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
+
 export default function Header() {
   const [currentTime, setCurrentTime] = useState('');
+  const [fetchedTimezone, setFetchedTimezone] = useState('');
+
   useEffect(() => {
-    const socket = io('http://localhost:4000'); // Replace with your server URL
-
-    socket.on('time', ({ time }) => {
-      setCurrentTime(time);
-    });
-
-    return () => {
-      socket.disconnect();
+    const fetchTimezone = async () => {
+      try {
+        const response = await fetch(
+          'https://api.ipgeolocation.io/ipgeo?apiKey=b4157b8346ff425897f0ccef5cde8bdd'
+        ); // Replace with your Abstract API key
+        const data = await response.json();
+        const timezone = data?.time_zone?.name;
+        console.log('User timezone:', timezone);
+        setFetchedTimezone(timezone);
+      } catch (error) {
+        console.error('Error fetching timezone:', error);
+      }
     };
+
+    fetchTimezone();
   }, []);
+  useEffect(() => {
+    if (fetchedTimezone) {
+      const ws = new WebSocket('ws://ws-clock.onrender.com'); // Replace with your WebSocket server URL
 
-  // Convert timestamp to human-readable format
-  const formattedTime = new Date(currentTime).toLocaleTimeString();
+      ws.onmessage = (event) => {
+        const receivedTime = parseInt(event.data); // Parse the received data as an integer (timestamp)
+        const utcTime = new Date(receivedTime);
+        if (!isNaN(utcTime)) {
+          const userTime = utcTime.toLocaleTimeString(undefined, {
+            timeZone: fetchedTimezone,
+          });
+          console.log(fetchedTimezone);
+          setCurrentTime(userTime);
+        } else {
+          console.log('Invalid Date', receivedTime);
+        }
+      };
 
+      return () => {
+        ws.close();
+      };
+    }
+  }, [fetchedTimezone]);
   console.log(currentTime);
   return (
     <header className='w-full h-full overflow-hidden'>
