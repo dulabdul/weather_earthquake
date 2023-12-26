@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-
+import Link from 'next/link';
 export default function Header() {
   const [currentTime, setCurrentTime] = useState('');
   const [fetchedTimezone, setFetchedTimezone] = useState('');
@@ -9,7 +9,7 @@ export default function Header() {
     const fetchTimezone = async () => {
       try {
         const response = await fetch(
-          'https://api.ipgeolocation.io/ipgeo?apiKey=b4157b8346ff425897f0ccef5cde8bdd'
+          'https://api.ipgeolocation.io/ipgeo?apiKey=b4157b8346ff425897f0ccef5cde8bdd&fields=time_zone'
         ); // Replace with your Abstract API key
         const data = await response.json();
         const timezone = data?.time_zone?.name;
@@ -48,7 +48,7 @@ export default function Header() {
   console.log(currentTime);
   return (
     <header className='w-full h-full overflow-hidden'>
-      <nav className='container mx-auto px-4 py-8'>
+      <nav className='container flex justify-between mx-auto px-4 py-8'>
         <div className='brand_name '>
           <p className='text-2xl md:text-3xl font-medium text-textPrimary'>
             Weather App
@@ -56,6 +56,19 @@ export default function Header() {
           <span className='text-textSecondary font-light text-sm'>
             {currentTime === '' ? 'loading' : currentTime}
           </span>
+        </div>
+        <div className='flex items-center'>
+          <ul className='flex flex-row items-center gap-x-4'>
+            <li className='text-primary hover:text-greenColor'>
+              <Link href='/'>Home</Link>
+            </li>
+            <li className='text-primary hover:text-greenColor'>
+              <Link href='/info-gempa'>Info Gempa</Link>
+            </li>
+            <li className='text-primary hover:text-greenColor'>
+              <Link href='/contact'>Contact</Link>
+            </li>
+          </ul>
         </div>
       </nav>
     </header>
