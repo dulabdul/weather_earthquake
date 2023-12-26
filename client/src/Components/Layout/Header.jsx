@@ -13,7 +13,7 @@ export default function Header() {
         ); // Replace with your Abstract API key
         const data = await response.json();
         const timezone = data?.time_zone?.name;
-        console.log('User timezone:', timezone);
+
         setFetchedTimezone(timezone);
       } catch (error) {
         console.error('Error fetching timezone:', error);
@@ -33,7 +33,7 @@ export default function Header() {
           const userTime = utcTime.toLocaleTimeString(undefined, {
             timeZone: fetchedTimezone,
           });
-          console.log(fetchedTimezone);
+
           setCurrentTime(userTime);
         } else {
           console.log('Invalid Date', receivedTime);
@@ -45,7 +45,6 @@ export default function Header() {
       };
     }
   }, [fetchedTimezone]);
-  console.log(currentTime);
   return (
     <header className='w-full h-full overflow-hidden'>
       <nav className='container flex justify-between mx-auto px-4 py-8'>

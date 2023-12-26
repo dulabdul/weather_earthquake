@@ -1,6 +1,21 @@
-import React from 'react';
+'use client';
+import {
+  WeatherContextAPI,
+  CityContextAPI,
+} from '@/helpers/context/WeatherContext';
+import React, { useContext, useState, useEffect } from 'react';
+
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 export default function Hero() {
+  const data = useContext(WeatherContextAPI);
+  const dataCity = useContext(CityContextAPI);
+  const [forecastWeather, setForecastWeather] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
+  useEffect(() => {
+    setWeatherData(data);
+    setForecastWeather(data?.data?.forecast?.area);
+  }, [data]);
+
   return (
     <div className='w-full h-full py-12 md:px-4'>
       <div className='container mx-auto'>
