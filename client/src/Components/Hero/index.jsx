@@ -59,20 +59,16 @@ export default function Hero() {
                               ? parameters.timerange
                                   .slice(0, 1)
                                   .map((timeranges) => {
-                                    console.log(timeranges);
-                                    return (
-                                      <>
-                                        {timeranges?.value
-                                          .slice(0, 1)
-                                          .map((values) => {
-                                            return (
-                                              <WeatherImage
-                                                codeOfWeather={values.text}
-                                              />
-                                            );
-                                          })}
-                                      </>
-                                    );
+                                    return timeranges?.value
+                                      .slice(0, 1)
+                                      .map((values) => {
+                                        return (
+                                          <WeatherImage
+                                            key={index}
+                                            codeOfWeather={values.text}
+                                          />
+                                        );
+                                      });
                                   })
                               : '';
                           })}
@@ -80,20 +76,18 @@ export default function Hero() {
                             return parameters?.description === 'Max temperature'
                               ? parameters.timerange
                                   .slice(0, 1)
-                                  .map((timeranges) => {
-                                    return (
-                                      <>
-                                        {timeranges?.value
-                                          .slice(0, 1)
-                                          .map((values) => {
-                                            return (
-                                              <p className='text3xl md:text-4xl text-white'>
-                                                {`${values.text}°${values.unit}`}
-                                              </p>
-                                            );
-                                          })}
-                                      </>
-                                    );
+                                  .map((timeranges, index) => {
+                                    return timeranges?.value
+                                      .slice(0, 1)
+                                      .map((values) => {
+                                        return (
+                                          <p
+                                            key={index}
+                                            className='text3xl md:text-4xl text-white'>
+                                            {`${values.text}°${values.unit}`}
+                                          </p>
+                                        );
+                                      });
                                   })
                               : '';
                           })}
@@ -120,20 +114,16 @@ export default function Hero() {
                               ? parameters.timerange
                                   .slice(0, 1)
                                   .map((timeranges) => {
-                                    console.log(timeranges);
-                                    return (
-                                      <>
-                                        {timeranges?.value
-                                          .slice(0, 1)
-                                          .map((values) => {
-                                            return (
-                                              <WeatherImage
-                                                codeOfWeather={values.text}
-                                              />
-                                            );
-                                          })}
-                                      </>
-                                    );
+                                    return timeranges?.value
+                                      .slice(0, 1)
+                                      .map((values) => {
+                                        return (
+                                          <WeatherImage
+                                            key={index}
+                                            codeOfWeather={values.text}
+                                          />
+                                        );
+                                      });
                                   })
                               : '';
                           })}
@@ -142,19 +132,17 @@ export default function Hero() {
                               ? parameters.timerange
                                   .slice(0, 1)
                                   .map((timeranges) => {
-                                    return (
-                                      <>
-                                        {timeranges?.value
-                                          .slice(0, 1)
-                                          .map((values) => {
-                                            return (
-                                              <p className='text3xl md:text-4xl text-white'>
-                                                {`${values.text}°${values.unit}`}
-                                              </p>
-                                            );
-                                          })}
-                                      </>
-                                    );
+                                    return timeranges?.value
+                                      .slice(0, 1)
+                                      .map((values) => {
+                                        return (
+                                          <p
+                                            key={index}
+                                            className='text3xl md:text-4xl text-white'>
+                                            {`${values.text}°${values.unit}`}
+                                          </p>
+                                        );
+                                      });
                                   })
                               : '';
                           })}
