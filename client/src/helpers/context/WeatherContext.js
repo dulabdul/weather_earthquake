@@ -1,40 +1,61 @@
 'use client';
 import { createContext, useState, useEffect } from 'react';
-
+import { fetchDataGEOIP, fetchDataWeather } from '../fetch/apiService';
 const WeatherContextAPI = createContext();
 const CityContextAPI = createContext();
 const WeatherProvider = ({ children }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [userProvince, setUserProvince] = useState(null);
   const [cityAPI, setCityAPI] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  // handle province not found in weather api
+  let provinceAPI;
+  switch (userProvince) {
+    case 'JABODETABEK':
+      provinceAPI = 'dkijakarta';
+      break;
+    case 'BandungRaya':
+      provinceAPI = 'jawabarat';
+      break;
+    default:
+      break;
+  }
   useEffect(() => {
-    // Fetch user's location information from IP geolocation API
-    fetch(
-      'https://api.ipgeolocation.io/ipgeo?apiKey=b4157b8346ff425897f0ccef5cde8bdd&ip=114.4.217.100'
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        // Extract user's province information
-        setCityAPI(data);
-        const provinceWithoutSpaces = data.state_prov.replace(/\s+/g, ''); // Remove spaces
+    const fetchAPIData = async () => {
+      setLoading(true);
+      try {
+        const result = await fetchDataGEOIP();
+        setCityAPI(result);
+        const provinceWithoutSpaces = result.state_prov.replace(/\s+/g, ''); // Remove spaces
         setUserProvince(provinceWithoutSpaces);
-      })
-      .catch((error) => console.error(error));
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAPIData();
   }, []);
   useEffect(() => {
     if (userProvince) {
       // Fetch data dari API saat komponen dimount
-      fetch(
-        `https://weather-api-tau-six.vercel.app/weather/${
-          userProvince === 'JABODETABEK' ? 'dkijakarta' : userProvince
-        }`
-      )
-        .then((response) => response.json())
-        .then((data) => setWeatherData(data))
-        .catch((error) => console.error(error));
+      const fetchAPIWeatherData = async () => {
+        setLoading(true);
+        try {
+          const result = await fetchDataWeather(`/weather/${provinceAPI}`);
+
+          setWeatherData(result);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchAPIWeatherData();
     }
   }, [userProvince]);
-
+  console.log(weatherData);
   return (
     <CityContextAPI.Provider value={cityAPI}>
       <WeatherContextAPI.Provider value={weatherData}>
