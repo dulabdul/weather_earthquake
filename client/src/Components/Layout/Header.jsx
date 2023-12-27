@@ -24,7 +24,7 @@ export default function Header() {
   }, []);
   useEffect(() => {
     if (fetchedTimezone) {
-      const ws = new WebSocket('ws://ws-clock.onrender.com'); // Replace with your WebSocket server URL
+      const ws = new WebSocket('wss://ws-clock.onrender.com'); // Replace with your WebSocket server URL
 
       ws.onmessage = (event) => {
         const receivedTime = parseInt(event.data); // Parse the received data as an integer (timestamp)
