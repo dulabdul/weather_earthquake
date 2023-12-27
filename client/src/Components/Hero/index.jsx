@@ -6,16 +6,19 @@ import {
 import React, { useContext, useState, useEffect } from 'react';
 
 import { FaMagnifyingGlass } from 'react-icons/fa6';
+import WeatherImage from '@/helpers/weatherImage';
 export default function Hero() {
   const data = useContext(WeatherContextAPI);
   const dataCity = useContext(CityContextAPI);
   const [forecastWeather, setForecastWeather] = useState(null);
-  const [weatherData, setWeatherData] = useState(null);
-  useEffect(() => {
-    setWeatherData(data);
-    setForecastWeather(data?.data?.forecast?.area);
-  }, [data]);
+  const [matches, setMatches] = useState([]);
 
+  useEffect(() => {
+    setForecastWeather(data?.data?.forecast?.area);
+    setMatches(
+      forecastWeather?.filter((item) => item.description === dataCity?.city)
+    );
+  }, [data, forecastWeather]);
   return (
     <div className='w-full h-full py-12 md:px-4'>
       <div className='container mx-auto'>
@@ -36,19 +39,129 @@ export default function Hero() {
               <p className='text-white font-semibold text-base'>
                 Lokasi Terbaru
               </p>
-              <div className='flex flex-col items-start px-4 py-2 rounded-lg bg-black/25'>
-                <div className='weather_card-region'>
-                  <p className='text-white text-lg font-light'>Quezon City</p>
-                  <p className='text-white text-sm font-light'>Flipina</p>
-                </div>
-                <div className='weather_card-info flex flex-row items-center gap-x-4'>
-                  <img
-                    src='/images/cloud_rain.png'
-                    alt='Awan Hujan'
-                  />
-                  <p className='text3xl md:text-5xl text-white'>28°c</p>
-                </div>
-              </div>
+              {matches?.length > 0
+                ? matches?.map((items, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className='flex flex-col items-start px-4 py-2 gap-y-4 rounded-lg bg-black/25'>
+                        <div className='weather_card-region'>
+                          <p className='text-white text-lg font-light'>
+                            {items.description}
+                          </p>
+                          <p className='text-white text-sm font-light'>
+                            {items.domain}
+                          </p>
+                        </div>
+                        <div className='weather_card-info flex flex-row items-center gap-x-4'>
+                          {items.parameter.map((parameters, index) => {
+                            return parameters.description === 'Weather'
+                              ? parameters.timerange
+                                  .slice(0, 1)
+                                  .map((timeranges) => {
+                                    console.log(timeranges);
+                                    return (
+                                      <>
+                                        {timeranges?.value
+                                          .slice(0, 1)
+                                          .map((values) => {
+                                            return (
+                                              <WeatherImage
+                                                codeOfWeather={values.text}
+                                              />
+                                            );
+                                          })}
+                                      </>
+                                    );
+                                  })
+                              : '';
+                          })}
+                          {items.parameter.map((parameters, index) => {
+                            return parameters?.description === 'Max temperature'
+                              ? parameters.timerange
+                                  .slice(0, 1)
+                                  .map((timeranges) => {
+                                    return (
+                                      <>
+                                        {timeranges?.value
+                                          .slice(0, 1)
+                                          .map((values) => {
+                                            return (
+                                              <p className='text3xl md:text-4xl text-white'>
+                                                {`${values.text}°${values.unit}`}
+                                              </p>
+                                            );
+                                          })}
+                                      </>
+                                    );
+                                  })
+                              : '';
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })
+                : forecastWeather?.slice(0, 1).map((forecasts, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className='flex flex-col items-start px-4 py-2 gap-y-4 rounded-lg bg-black/25'>
+                        <div className='weather_card-region'>
+                          <p className='text-white text-lg font-light'>
+                            {forecasts.description}
+                          </p>
+                          <p className='text-white text-sm font-light'>
+                            {forecasts.domain}
+                          </p>
+                        </div>
+                        <div className='weather_card-info flex flex-row items-center gap-x-4'>
+                          {forecasts.parameter.map((parameters, index) => {
+                            return parameters.description === 'Weather'
+                              ? parameters.timerange
+                                  .slice(0, 1)
+                                  .map((timeranges) => {
+                                    console.log(timeranges);
+                                    return (
+                                      <>
+                                        {timeranges?.value
+                                          .slice(0, 1)
+                                          .map((values) => {
+                                            return (
+                                              <WeatherImage
+                                                codeOfWeather={values.text}
+                                              />
+                                            );
+                                          })}
+                                      </>
+                                    );
+                                  })
+                              : '';
+                          })}
+                          {forecasts.parameter.map((parameters, index) => {
+                            return parameters?.description === 'Max temperature'
+                              ? parameters.timerange
+                                  .slice(0, 1)
+                                  .map((timeranges) => {
+                                    return (
+                                      <>
+                                        {timeranges?.value
+                                          .slice(0, 1)
+                                          .map((values) => {
+                                            return (
+                                              <p className='text3xl md:text-4xl text-white'>
+                                                {`${values.text}°${values.unit}`}
+                                              </p>
+                                            );
+                                          })}
+                                      </>
+                                    );
+                                  })
+                              : '';
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
             </div>
           </div>
         </div>
