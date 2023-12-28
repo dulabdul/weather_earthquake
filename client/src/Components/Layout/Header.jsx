@@ -1,6 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+
+import { LoadingClockHeader } from '../Loading';
 export default function Header() {
   const [currentTime, setCurrentTime] = useState('');
   const [fetchedTimezone, setFetchedTimezone] = useState('');
@@ -10,7 +12,7 @@ export default function Header() {
       try {
         const response = await fetch(
           'https://api.ipgeolocation.io/ipgeo?apiKey=b4157b8346ff425897f0ccef5cde8bdd&fields=time_zone'
-        ); // Replace with your Abstract API key
+        );
         const data = await response.json();
         const timezone = data?.time_zone?.name;
 
@@ -53,7 +55,7 @@ export default function Header() {
             Weather App
           </p>
           <span className='text-textSecondary font-light text-sm'>
-            {currentTime === '' ? 'loading' : currentTime}
+            {currentTime === '' ? <LoadingClockHeader /> : currentTime}
           </span>
         </div>
         <div className='flex items-center'>
