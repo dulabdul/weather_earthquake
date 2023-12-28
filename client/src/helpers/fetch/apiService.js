@@ -14,7 +14,7 @@ const fetchDataWeather = async (endpoint) => {
 };
 
 const apiGEOIP = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_GEOIPLOOKUP}`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_GEOIPLOOKUP}?apiKey=${process.env.NEXT_PUBLIC_API_KEY_GEOIP}&ip=114.122.105.149`,
 });
 
 const fetchDataGEOIP = async (endpoint) => {
